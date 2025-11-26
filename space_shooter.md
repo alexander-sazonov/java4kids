@@ -1,5 +1,12 @@
+---
+layout: default
+title: Проект: «Space Shooter»
+parent: Уроки Java для детей
+nav_order: 2
+---
 
-# Учебный проект: «Звездный Защитник»
+
+# Проект: «Space Shooter»
 
 **Цель:** Создать игру, где космический корабль летает снизу, стреляет лазерами и уничтожает астероиды.
 **Новые концепции:** Наследование, ArrayList, итераторы, таймеры появления врагов.
@@ -37,10 +44,10 @@ public class GameObject {
         this.x = x;
         this.y = y;
         this.speed = speed;
-        
+
         this.width = texture.getWidth();
         this.height = texture.getHeight();
-        
+
         // Создаем прямоугольник вокруг нашей текстуры
         this.bounds = new Rectangle(x, y, width, height);
     }
@@ -49,7 +56,7 @@ public class GameObject {
     public void draw(Batch batch) {
         batch.draw(texture, x, y);
     }
-    
+
     // Обновление прямоугольника (хитбокса) при движении
     public void updateBounds() {
         bounds.setPosition(x, y);
@@ -79,7 +86,7 @@ public class Ship extends GameObject {
     public Ship(Texture texture) {
         // Вызываем конструктор родителя (GameObject)
         // Ставим корабль по центру снизу, скорость 300 пикселей/сек
-        super(texture, Gdx.graphics.getWidth() / 2, 20, 300); 
+        super(texture, Gdx.graphics.getWidth() / 2, 20, 300);
     }
 
     public void update() {
@@ -142,9 +149,9 @@ public class Asteroid extends GameObject {
 
     public Asteroid(Texture texture) {
         // Появляется сверху в случайном месте по X
-        super(texture, 
-              MathUtils.random(0, Gdx.graphics.getWidth() - texture.getWidth()), 
-              Gdx.graphics.getHeight(), 
+        super(texture,
+              MathUtils.random(0, Gdx.graphics.getWidth() - texture.getWidth()),
+              Gdx.graphics.getHeight(),
               MathUtils.random(100, 250)); // Случайная скорость
     }
 
@@ -175,10 +182,10 @@ import java.util.Iterator;
 
 public class MyGdxGame extends ApplicationAdapter {
     SpriteBatch batch;
-    
+
     // Текстуры (грузим один раз, чтобы не забивать память!)
     Texture imgShip, imgBullet, imgAsteroid;
-    
+
     Ship player;
     ArrayList<Bullet> bullets;
     ArrayList<Asteroid> asteroids;
@@ -188,7 +195,7 @@ public class MyGdxGame extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        
+
         // Загрузка картинок
         imgShip = new Texture("ship.png");
         imgBullet = new Texture("bullet.png");
@@ -244,10 +251,10 @@ public class MyGdxGame extends ApplicationAdapter {
 
             // Проверка: Астероид врезался в Игрока?
             if (a.getBounds().overlaps(player.getBounds())) {
-                System.out.println("GAME OVER!"); 
+                System.out.println("GAME OVER!");
                 // Тут можно перезапустить игру: create();
             }
-            
+
             // Проверка: Астероид улетел вниз?
             if (a.y + a.height < 0) {
                 asteroidIter.remove();
@@ -270,7 +277,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
         // --- 2. ОТРИСОВКА (DRAW) ---
         batch.begin();
-        
+
         player.draw(batch); // Метод, который мы создали в GameObject
 
         for (Bullet b : bullets) {

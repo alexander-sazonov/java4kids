@@ -1,3 +1,10 @@
+---
+layout: default
+title: Проект: «Pop The Balloon»
+parent: Уроки Java для детей
+nav_order: 2
+---
+
 # 🎈 Создание игры "Pop the Balloon" на Java (LibGDX)
 
 В этом уроке мы научимся:
@@ -37,20 +44,20 @@ class Balloon {
     // Конструктор: вызывается при создании нового шарика
     public Balloon(Texture balloonTexture) {
         this.image = balloonTexture; // Запоминаем переданную картинку
-        
+
         hitbox = new Rectangle();
-        
+
         // ВАЖНО: Берем размеры прямо из картинки!
         // Если ты поменяешь картинку на большую, код сам подстроится.
         hitbox.width = image.getWidth();
         hitbox.height = image.getHeight();
-        
+
         // Случайная позиция по X (в пределах ширины экрана 800 минус ширина шарика)
-        hitbox.x = MathUtils.random(0, 800 - hitbox.width); 
-        
+        hitbox.x = MathUtils.random(0, 800 - hitbox.width);
+
         // Появляемся сразу под экраном (спрятавшись на свою высоту)
-        hitbox.y = -hitbox.height; 
-        
+        hitbox.y = -hitbox.height;
+
         // Случайная скорость (чем больше число, тем быстрее)
         speed = MathUtils.random(200, 400);
     }
@@ -82,12 +89,12 @@ import java.util.Iterator;
 
 public class BalloonGame extends ApplicationAdapter {
     SpriteBatch batch;
-    
+
     Texture balloonImg; // Картинка шарика (загрузим 1 раз)
     Texture backImg;    // Картинка фона
-    
+
     Array<Balloon> balloons; // Список активных шариков
-    
+
     long lastDropTime; // Время последнего появления шарика
     OrthographicCamera camera; // Камера
     int score; // Счет игрока
@@ -95,22 +102,22 @@ public class BalloonGame extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        
+
         // 1. Загружаем ресурсы
         balloonImg = new Texture("balloon.png");
         backImg = new Texture("background.jpg");
-        
+
         // 2. Настраиваем камеру (размер окна 800x480)
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
-        
+
         // 3. Инициализируем список и создаем первый шарик
         balloons = new Array<Balloon>();
         spawnBalloon();
-        
+
         score = 0;
     }
-    
+
     // Вспомогательный метод для создания шарика
     private void spawnBalloon() {
         // Передаем нашу загруженную картинку в новый объект
@@ -134,7 +141,7 @@ public class BalloonGame extends ApplicationAdapter {
     public void render() {
         // 1. Очистка экрана
         ScreenUtils.clear(0, 0, 0.2f, 1);
-        
+
         // 2. Обновление камеры
         camera.update();
         batch.setProjectionMatrix(camera.combined);
@@ -142,7 +149,7 @@ public class BalloonGame extends ApplicationAdapter {
         // 3. Рисование
         batch.begin();
         batch.draw(backImg, 0, 0); // Рисуем фон
-        
+
         // Просим каждый шарик нарисоваться
         for (Balloon balloon : balloons) {
             balloon.draw(batch);
@@ -157,10 +164,10 @@ public class BalloonGame extends ApplicationAdapter {
             // Получаем координаты клика
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            
+
             // ВАЖНО: Переводим координаты экрана в координаты игрового мира
             camera.unproject(touchPos);
-            
+
             // Проверяем все шарики
             Iterator<Balloon> iter = balloons.iterator();
             while (iter.hasNext()) {
@@ -183,10 +190,10 @@ public class BalloonGame extends ApplicationAdapter {
         Iterator<Balloon> iter = balloons.iterator();
         while (iter.hasNext()) {
             Balloon b = iter.next();
-            
+
             // Двигаем вверх: S = V * T (скорость * время последнего кадра)
             b.hitbox.y += b.speed * Gdx.graphics.getDeltaTime();
-            
+
             // Если улетел за верхний край (480)
             if (b.hitbox.y > 480) {
                 iter.remove(); // Просто удаляем
@@ -217,7 +224,7 @@ public class BalloonGame extends ApplicationAdapter {
 
 Если запутался, вот как должен выглядеть файл целиком:
 
-<details> 
+<details>
   <summary>Нажми, чтобы развернуть полный код</summary>
 
 ```java

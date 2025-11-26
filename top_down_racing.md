@@ -1,5 +1,12 @@
+---
+layout: default
+title: Проект: «Racing Game»
+parent: Уроки Java для детей
+nav_order: 2
+---
 
-# Проект: «Трасса» (Top-Down Racing)
+
+# Проект: «Racing Game»
 
 **Цель:** Создать гонку с видом сверху. Твоя машина находится внизу экрана. Навстречу несутся препятствия (камни) и разметка дороги. Твоя задача — уворачиваться от камней. Чем дольше едешь, тем выше скорость!
 
@@ -51,7 +58,7 @@ public class GameObject {
     public void updateBounds() {
         bounds.setPosition(x, y);
     }
-    
+
     public Rectangle getBounds() {
         return bounds;
     }
@@ -72,7 +79,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 
 public class Car extends GameObject {
-    
+
     float speed = 400; // Скорость перемещения влево-вправо
 
     public Car(Texture texture) {
@@ -120,21 +127,21 @@ public class Stone extends GameObject {
     public Stone(Texture texture) {
         // Появляется за верхней границей экрана
         // Позиция X случайная
-        super(texture, 
-              MathUtils.random(0, Gdx.graphics.getWidth() - texture.getWidth()), 
+        super(texture,
+              MathUtils.random(0, Gdx.graphics.getWidth() - texture.getWidth()),
               Gdx.graphics.getHeight());
     }
 
     // В метод update мы передаем gameSpeed — скорость всей гонки
     public void update(float gameSpeed) {
         float dt = Gdx.graphics.getDeltaTime();
-        
+
         // Камень летит вниз со скоростью игры
         y -= gameSpeed * dt;
-        
+
         updateBounds();
     }
-    
+
     // Проверка: улетел ли камень за низ экрана?
     public boolean isOffScreen() {
         return y + height < 0;
@@ -163,7 +170,7 @@ public class RoadLine extends GameObject {
     public void update(float gameSpeed) {
         y -= gameSpeed * Gdx.graphics.getDeltaTime();
     }
-    
+
     public boolean isOffScreen() {
         return y + height < 0;
     }
@@ -189,14 +196,14 @@ import java.util.Iterator;
 
 public class MyGdxGame extends ApplicationAdapter {
     SpriteBatch batch;
-    
+
     Texture imgCar, imgStone, imgLine;
-    
+
     Car player;
-    
+
     ArrayList<Stone> stones;
     ArrayList<RoadLine> lines;
-    
+
     // Параметры игры
     float gameSpeed = 300;      // Начальная скорость гонки (пикселей в секунду)
     float stoneSpawnTimer = 0;  // Таймер для камней
@@ -206,13 +213,13 @@ public class MyGdxGame extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        
+
         imgCar = new Texture("car.png");
         imgStone = new Texture("stone.png");
         imgLine = new Texture("line.png");
-        
+
         player = new Car(imgCar);
-        
+
         stones = new ArrayList<>();
         lines = new ArrayList<>();
     }
@@ -221,20 +228,20 @@ public class MyGdxGame extends ApplicationAdapter {
     public void render() {
         // Очищаем экран серым цветом (цвет асфальта)
         ScreenUtils.clear(0.3f, 0.3f, 0.3f, 1);
-        
+
         float dt = Gdx.graphics.getDeltaTime();
 
         // --- 1. ЛОГИКА И ОБНОВЛЕНИЯ ---
 
         // Ускоряем игру со временем!
         // Каждую секунду скорость растет на 5 единиц
-        gameSpeed += 5 * dt; 
+        gameSpeed += 5 * dt;
 
         player.update();
 
         // Генерация дорожной разметки (для красоты)
         createRoadLines(dt);
-        
+
         // Генерация препятствий
         createStones(dt);
 
@@ -269,7 +276,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
         // --- 2. ОТРИСОВКА ---
         batch.begin();
-        
+
         // Сначала рисуем дорогу (чтобы она была ПОД машиной)
         for (RoadLine line : lines) {
             line.draw(batch);
@@ -282,10 +289,10 @@ public class MyGdxGame extends ApplicationAdapter {
         for (Stone stone : stones) {
             stone.draw(batch);
         }
-        
+
         batch.end();
     }
-    
+
     // Вспомогательный метод для создания камней
     private void createStones(float dt) {
         stoneSpawnTimer += dt;

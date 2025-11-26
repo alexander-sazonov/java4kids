@@ -1,5 +1,11 @@
+---
+layout: default
+title: Проект: «Maze Runner»
+parent: Уроки Java для детей
+nav_order: 2
+---
 
-# 🏃‍♂️ Tutorial: Создание игры "Maze Runner" (Лабиринт)
+# 🏃‍♂️ Tutorial: Создание игры "Maze Runner"
 
 **Уровень:** Средний
 **Цель:** Создать героя, который бегает по лабиринту, собирает ключи и не может проходить сквозь стены.
@@ -95,8 +101,8 @@ class Hero {
 
         // 2. Движение по Y (Вверх-Вниз)
         // Запоминаем X, так как он уже может быть новым (если не врезались)
-        oldX = hitbox.x; 
-        
+        oldX = hitbox.x;
+
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) hitbox.y += speed * dt;
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) hitbox.y -= speed * dt;
 
@@ -129,11 +135,11 @@ class Hero {
 public class MazeGame extends ApplicationAdapter {
     SpriteBatch batch;
     Texture wallImg, heroImg, coinImg;
-    
+
     Array<Wall> walls;
     Array<Rectangle> coins; // Монетки будут просто прямоугольниками
     Hero player;
-    
+
     OrthographicCamera camera;
 
     // СХЕМА УРОВНЯ (1 строка = 1 ряд блоков)
@@ -161,23 +167,23 @@ public class MazeGame extends ApplicationAdapter {
 
         walls = new Array<>();
         coins = new Array<>();
-        
+
         // Размер одного блока (зависит от ваших картинок)
-        float tileSize = 32; 
+        float tileSize = 32;
 
         // --- ГЕНЕРАТОР УРОВНЯ ---
         // Читаем массив строк снизу вверх или сверху вниз
-        // В LibGDX Y=0 внизу, поэтому проще читать массив с конца, 
+        // В LibGDX Y=0 внизу, поэтому проще читать массив с конца,
         // чтобы визуально карта совпадала с кодом.
-        
+
         int rowCount = map.length;
         for (int y = 0; y < rowCount; y++) {
             // Берем строку (но переворачиваем порядок, чтобы map[0] был верхом)
-            String line = map[rowCount - 1 - y]; 
-            
+            String line = map[rowCount - 1 - y];
+
             for (int x = 0; x < line.length(); x++) {
                 char cell = line.charAt(x);
-                
+
                 if (cell == '#') {
                     walls.add(new Wall(x * tileSize, y * tileSize, tileSize, wallImg));
                 }
@@ -199,10 +205,10 @@ public class MazeGame extends ApplicationAdapter {
     @Override
     public void render() {
         ScreenUtils.clear(0, 0, 0, 1);
-        
+
         // Обновляем логику героя
         player.update(Gdx.graphics.getDeltaTime(), walls);
-        
+
         // Проверка сбора монет
         // Используем итератор для удаления собранных монет
         Iterator<Rectangle> iter = coins.iterator();
@@ -218,21 +224,21 @@ public class MazeGame extends ApplicationAdapter {
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
-        
+
         // Рисуем стены
         for (Wall wall : walls) wall.draw(batch);
-        
+
         // Рисуем монеты
         for (Rectangle coin : coins) {
             batch.draw(coinImg, coin.x, coin.y);
         }
-        
+
         // Рисуем игрока
         player.draw(batch);
-        
+
         batch.end();
     }
-    
+
     @Override
     public void dispose() {
         batch.dispose();

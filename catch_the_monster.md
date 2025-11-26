@@ -1,3 +1,10 @@
+---
+layout: default
+title: Проект: «Охота на монстров (Whack-a-Mole)»
+parent: Уроки Java для детей
+nav_order: 2
+---
+
 
 # Проект: «Охота на Монстров» (Whack-a-Mole)
 
@@ -44,7 +51,7 @@ public class GameObject {
         this.y = y;
         this.width = texture.getWidth();
         this.height = texture.getHeight();
-        
+
         // Создаем прямоугольник для обработки кликов
         this.bounds = new Rectangle(x, y, width, height);
     }
@@ -53,7 +60,7 @@ public class GameObject {
     public void draw(Batch batch) {
         batch.draw(texture, x, y);
     }
-    
+
     // Метод проверки: попали ли мы в объект мышкой?
     // clickX и clickY — это координаты клика в игровом мире
     public boolean isHit(float clickX, float clickY) {
@@ -78,11 +85,11 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 public class Monster extends GameObject {
-    
+
     private boolean isVisible = false;   // Виден ли монстр сейчас?
     private float timeVisible = 0;       // Сколько времени он уже виден
     private float maxVisibleTime = 1.0f; // Через сколько секунд исчезнет сам
-    
+
     private Texture holeTexture; // Текстура норы
 
     public Monster(Texture texture, Texture holeTexture, float x, float y) {
@@ -95,7 +102,7 @@ public class Monster extends GameObject {
         if (isVisible) {
             float dt = Gdx.graphics.getDeltaTime();
             timeVisible += dt;
-            
+
             // Если время вышло — монстр прячется
             if (timeVisible > maxVisibleTime) {
                 hide();
@@ -108,14 +115,14 @@ public class Monster extends GameObject {
         isVisible = true;
         timeVisible = 0;
         // Монстр будет виден случайное время: от 0.5 до 1.5 секунд
-        maxVisibleTime = MathUtils.random(0.5f, 1.5f); 
+        maxVisibleTime = MathUtils.random(0.5f, 1.5f);
     }
 
     // Команда "Спрячься!"
     public void hide() {
         isVisible = false;
     }
-    
+
     // Геттер: узнать, виден ли монстр
     public boolean isVisible() {
         return isVisible;
@@ -129,7 +136,7 @@ public class Monster extends GameObject {
 
         // 2. Если монстр "вылез", рисуем его поверх норы
         if (isVisible) {
-            super.draw(batch); 
+            super.draw(batch);
         }
     }
 }
@@ -159,45 +166,45 @@ import java.util.ArrayList;
 public class MyGdxGame extends ApplicationAdapter {
     SpriteBatch batch;
     OrthographicCamera camera; // Наша камера
-    
+
     Texture imgMonster;
     Texture imgHole;
-    
+
     // Список всех монстров на поле
     ArrayList<Monster> monsters;
-    
+
     float spawnTimer = 0; // Таймер для появления нового монстра
     int score = 0;        // Счёт очков
 
     @Override
     public void create() {
         batch = new SpriteBatch();
-        
+
         // Настройка камеры. 800x600 — размер нашего игрового окна
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 600);
-        
+
         imgMonster = new Texture("monster.png");
         imgHole = new Texture("hole.png");
-        
+
         monsters = new ArrayList<>();
-        
+
         createGrid(); // Вызываем метод создания сетки
     }
-    
+
     // Метод, который расставит норы ровными рядами
     private void createGrid() {
         float startX = 200; // Отступ слева
         float startY = 150; // Отступ снизу
         float gap = 150;    // Расстояние между норами
-        
+
         // Двойной цикл: 3 ряда по 3 колонки
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
                 // Вычисляем координаты для текущей норы
                 float x = startX + col * gap;
                 float y = startY + row * gap;
-                
+
                 monsters.add(new Monster(imgMonster, imgHole, x, y));
             }
         }
@@ -206,8 +213,8 @@ public class MyGdxGame extends ApplicationAdapter {
     @Override
     public void render() {
         // Очищаем экран (цвет темно-зеленый, как трава)
-        ScreenUtils.clear(0.1f, 0.4f, 0.1f, 1); 
-        
+        ScreenUtils.clear(0.1f, 0.4f, 0.1f, 1);
+
         // Обязательно обновляем камеру и соединяем её с отрисовкой
         camera.update();
         batch.setProjectionMatrix(camera.combined);
@@ -218,16 +225,16 @@ public class MyGdxGame extends ApplicationAdapter {
 
         // Таймер: каждые 0.8 секунды пытаемся показать монстра
         spawnTimer += dt;
-        if (spawnTimer > 0.8f) { 
+        if (spawnTimer > 0.8f) {
             spawnRandomMonster();
             spawnTimer = 0;
         }
-        
+
         // Обновляем таймеры жизни у всех монстров
         for (Monster m : monsters) {
             m.update();
         }
-        
+
         // Проверяем клик мышкой
         if (Gdx.input.justTouched()) {
             handleInput();
@@ -235,20 +242,20 @@ public class MyGdxGame extends ApplicationAdapter {
 
         // --- 2. ОТРИСОВКА ---
         batch.begin();
-        
+
         // Рисуем всех монстров (метод draw сам разберется, рисовать монстра или только нору)
         for (Monster m : monsters) {
             m.draw(batch);
         }
-        
+
         batch.end();
     }
-    
+
     // Выбираем случайную нору и говорим монстру: "Вылезай!"
     private void spawnRandomMonster() {
         int randomIndex = MathUtils.random(0, monsters.size() - 1);
         Monster m = monsters.get(randomIndex);
-        
+
         // Если в этой норе монстр уже сидит, ничего не делаем
         if (!m.isVisible()) {
             m.show();
@@ -260,11 +267,11 @@ public class MyGdxGame extends ApplicationAdapter {
         // 1. Получаем координаты мыши на экране монитора
         int mouseX = Gdx.input.getX();
         int mouseY = Gdx.input.getY();
-        
+
         // 2. Переводим их в координаты игрового мира с помощью камеры
         Vector3 touchPos = new Vector3(mouseX, mouseY, 0);
-        camera.unproject(touchPos); 
-        
+        camera.unproject(touchPos);
+
         // 3. Проверяем каждого монстра
         for (Monster m : monsters) {
             // Если монстр виден И мы попали в него координатами из touchPos

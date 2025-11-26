@@ -1,3 +1,10 @@
+---
+layout: default
+title: Проект: «Аркрноид»
+parent: Уроки Java для детей
+nav_order: 2
+---
+
 
 # Проект: «Арканоид» (Breakout)
 
@@ -53,7 +60,7 @@ public class GameObject {
     public void updateBounds() {
         bounds.setPosition(x, y);
     }
-    
+
     public Rectangle getBounds() {
         return bounds;
     }
@@ -116,7 +123,7 @@ public class Ball extends GameObject {
 
     public void update() {
         float dt = Gdx.graphics.getDeltaTime();
-        
+
         // Двигаем мяч
         x += speedX * dt;
         y += speedY * dt;
@@ -133,12 +140,12 @@ public class Ball extends GameObject {
 
         updateBounds();
     }
-    
+
     // Методы, чтобы заставить мяч отскочить вручную (от ракетки или кирпича)
     public void reverseY() {
         speedY = -speedY;
     }
-    
+
     // Проверка: упал ли мяч вниз?
     public boolean isLost() {
         return y < 0;
@@ -183,9 +190,9 @@ import java.util.Iterator;
 
 public class MyGdxGame extends ApplicationAdapter {
     SpriteBatch batch;
-    
+
     Texture imgPaddle, imgBall, imgBrick;
-    
+
     Paddle paddle;
     Ball ball;
     ArrayList<Brick> bricks;
@@ -193,33 +200,33 @@ public class MyGdxGame extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        
+
         imgPaddle = new Texture("paddle.png");
         imgBall = new Texture("ball.png");
         imgBrick = new Texture("brick.png");
-        
+
         paddle = new Paddle(imgPaddle);
         ball = new Ball(imgBall);
         bricks = new ArrayList<>();
-        
+
         createLevel();
     }
-    
+
     // Создаем сетку кирпичей
     private void createLevel() {
         int rows = 5;  // Сколько рядов кирпичей
         int cols = 8;  // Сколько кирпичей в ряду
-        
+
         // Отступы, чтобы кирпичи были по центру
         float startX = 50;
         float startY = Gdx.graphics.getHeight() - 100;
-        
+
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 // Координаты: col умножаем на ширину кирпича + зазор 5 пикселей
                 float x = startX + col * (imgBrick.getWidth() + 5);
                 float y = startY - row * (imgBrick.getHeight() + 5);
-                
+
                 bricks.add(new Brick(imgBrick, x, y));
             }
         }
@@ -228,45 +235,45 @@ public class MyGdxGame extends ApplicationAdapter {
     @Override
     public void render() {
         ScreenUtils.clear(0.2f, 0.2f, 0.2f, 1); // Темно-серый фон
-        
+
         // --- 1. ЛОГИКА ---
-        
+
         paddle.update();
         ball.update();
-        
+
         // Проверка: Мяч упал?
         if (ball.isLost()) {
             System.out.println("GAME OVER!");
             // Можно перезапустить мяч:
-            ball = new Ball(imgBall); 
+            ball = new Ball(imgBall);
         }
-        
+
         // Столкновение Мяча с Ракеткой
         if (ball.getBounds().overlaps(paddle.getBounds())) {
             // Мяч летит вниз И касается ракетки
-            // Дополнительная проверка "ball.y > paddle.y" нужна, 
+            // Дополнительная проверка "ball.y > paddle.y" нужна,
             // чтобы мяч не прилипал к ракетке сбоку
             if (ball.y > paddle.y) {
                 ball.reverseY(); // Отбиваем мяч вверх
-                
+
                 // Хитрый трюк: немного поднимаем мяч, чтобы он не застрял внутри ракетки
                 ball.y = paddle.y + paddle.height + 1;
                 ball.updateBounds();
             }
         }
-        
+
         // Столкновение Мяча с Кирпичами
         Iterator<Brick> iter = bricks.iterator();
         while (iter.hasNext()) {
             Brick b = iter.next();
-            
+
             if (ball.getBounds().overlaps(b.getBounds())) {
                 iter.remove();  // Удаляем кирпич
                 ball.reverseY(); // Мяч отскакивает
                 break; // Важно! За один кадр разбиваем только один кирпич
             }
         }
-        
+
         // Победа?
         if (bricks.isEmpty()) {
             System.out.println("YOU WIN!");
@@ -275,14 +282,14 @@ public class MyGdxGame extends ApplicationAdapter {
 
         // --- 2. ОТРИСОВКА ---
         batch.begin();
-        
+
         paddle.draw(batch);
         ball.draw(batch);
-        
+
         for (Brick b : bricks) {
             b.draw(batch);
         }
-        
+
         batch.end();
     }
 
@@ -309,5 +316,5 @@ public class MyGdxGame extends ApplicationAdapter {
 
 1.  **Ускорение:** В классе `Ball` создай метод `increaseSpeed()`, который умножает скорость на 1.1 (на 10%). Вызывай этот метод каждый раз, когда мяч касается ракетки. Игра станет сложнее!
 2.  **Разноцветные кирпичи:** В классе `Brick` добавь поле `color`. В `createLevel` делай так: 1-й ряд — красные кирпичи, 2-й — желтые и т.д. (Для этого нужно использовать метод `batch.setColor()` перед отрисовкой кирпича и `batch.setColor(Color.WHITE)` после).
-3.  **"Умный" отскок:** Сейчас мяч всегда отскакивает под одним углом. Попробуй сделать так: если мяч ударился о левую часть ракетки — он летит влево, если о правую — вправо. 
+3.  **"Умный" отскок:** Сейчас мяч всегда отскакивает под одним углом. Попробуй сделать так: если мяч ударился о левую часть ракетки — он летит влево, если о правую — вправо.
     *Подсказка:* Нужно менять `speedX` в зависимости от того, где именно ударился мяч (`ball.x - paddle.x`).

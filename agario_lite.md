@@ -1,4 +1,9 @@
-
+---
+layout: default
+title: Проект: «Голодный Шарик» (Agario Lite)
+parent: Уроки Java для детей
+nav_order: 2
+---
 # Проект: «Голодный Шарик» (Agario Lite)
 
 **Цель:** Ты управляешь шариком. На экране появляется еда. Твоя задача — съедать её. С каждым съеденным кусочком твой персонаж становится больше.
@@ -42,8 +47,8 @@ public class GameObject {
         this.x = x;
         this.y = y;
         this.size = size;
-        
-        // Создаем математический круг. 
+
+        // Создаем математический круг.
         // Ему нужно передать координаты ЦЕНТРА и РАДИУС.
         // Центр = координата + половина размера. Радиус = половина размера.
         this.bounds = new Circle(x + size / 2, y + size / 2, size / 2);
@@ -85,8 +90,8 @@ public class Food extends GameObject {
     public Food(Texture texture) {
         // Создаем еду размером 30x30 пикселей.
         // Координаты пока ставим 0,0, так как сразу вызовем respawn()
-        super(texture, 0, 0, 30); 
-        respawn(); 
+        super(texture, 0, 0, 30);
+        respawn();
     }
 
     // Метод для переноса еды в новое место
@@ -112,7 +117,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 
 public class Player extends GameObject {
-    
+
     float speed = 200; // Скорость движения
 
     public Player(Texture texture) {
@@ -143,17 +148,17 @@ public class Player extends GameObject {
     public void grow() {
         // Увеличиваем размер на 5 пикселей
         size += 5;
-        
-        // Немного сдвигаем координаты влево и вниз, 
+
+        // Немного сдвигаем координаты влево и вниз,
         // чтобы казалось, что мы растем из центра
         x -= 2.5f;
         y -= 2.5f;
-        
+
         // Физика: чем больше объект, тем тяжелее ему двигаться
         if (speed > 50) {
-            speed -= 2; 
+            speed -= 2;
         }
-        
+
         updateBounds();
     }
 }
@@ -175,18 +180,18 @@ import java.util.ArrayList;
 
 public class MyGdxGame extends ApplicationAdapter {
     SpriteBatch batch;
-    
+
     Texture imgPlayer, imgFood;
-    
+
     Player player;
     ArrayList<Food> foods;
-    
+
     int score = 0;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
-        
+
         imgPlayer = new Texture("player.png");
         imgFood = new Texture("food.png");
 
@@ -197,9 +202,9 @@ public class MyGdxGame extends ApplicationAdapter {
         imgPlayer.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         imgFood.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         // --------------------------
-        
+
         player = new Player(imgPlayer);
-        
+
         // Создаем 20 кусочков еды
         foods = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
@@ -211,10 +216,10 @@ public class MyGdxGame extends ApplicationAdapter {
     public void render() {
         // Светло-серый фон
         ScreenUtils.clear(0.9f, 0.9f, 0.9f, 1);
-        
+
         // --- ЛОГИКА ---
         player.update();
-        
+
         for (Food f : foods) {
             // Проверка столкновения КРУГОВ (overlaps)
             if (player.getBounds().overlaps(f.getBounds())) {
@@ -227,15 +232,15 @@ public class MyGdxGame extends ApplicationAdapter {
 
         // --- ОТРИСОВКА ---
         batch.begin();
-        
+
         // Сначала рисуем еду
         for (Food f : foods) {
             f.draw(batch);
         }
-        
+
         // Потом игрока (чтобы он перекрывал еду)
         player.draw(batch);
-        
+
         batch.end();
     }
 

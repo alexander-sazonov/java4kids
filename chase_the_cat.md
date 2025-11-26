@@ -1,3 +1,10 @@
+---
+layout: default
+title: Проект: «Поймай кота (Catch the Cat)»
+parent: Уроки Java для детей
+nav_order: 2
+---
+
 
 # Проект: «Поймай кота» (Catch the Cat)
 

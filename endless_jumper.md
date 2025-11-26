@@ -1,5 +1,11 @@
+---
+layout: default
+title: Проект: «Run and Jump»
+parent: Уроки Java для детей
+nav_order: 2
+---
 
-# Проект: «Прыг-скок» (Endless Jumper)
+# Проект: «Run and Jump»
 
 **Цель:** Создать игру-раннер. Твой персонаж бежит слева направо (на самом деле он стоит на месте, а мир движется ему навстречу). На пути встречаются препятствия. Твоя задача — вовремя нажимать на экран, чтобы перепрыгивать их.
 
@@ -32,7 +38,7 @@ public class GameObject {
     Texture texture;
     float x, y;
     float width, height;
-    Rectangle bounds; 
+    Rectangle bounds;
 
     public GameObject(Texture texture, float x, float y) {
         this.texture = texture;
@@ -50,7 +56,7 @@ public class GameObject {
     public void updateBounds() {
         bounds.setPosition(x, y);
     }
-    
+
     public Rectangle getBounds() {
         return bounds;
     }
@@ -73,11 +79,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 
 public class Runner extends GameObject {
-    
+
     float groundY;       // Уровень земли (где ноги персонажа)
     boolean isJumping = false;
     float jumpTimer = 0; // Время полета
-    
+
     float jumpHeight = 150; // Насколько высоко прыгаем (в пикселях)
     float jumpSpeed = 3.0f; // Как быстро происходит прыжок
 
@@ -102,7 +108,7 @@ public class Runner extends GameObject {
             // MathUtils.sin(0) = 0 (начало)
             // MathUtils.sin(PI / 2) = 1 (верхняя точка)
             // MathUtils.sin(PI) = 0 (приземление)
-            
+
             // Мы прибавляем к уровню земли высоту прыжка умноженную на синус
             y = groundY + MathUtils.sin(jumpTimer) * jumpHeight;
 
@@ -112,7 +118,7 @@ public class Runner extends GameObject {
                 isJumping = false; // Прыжок окончен
             }
         }
-        
+
         updateBounds();
     }
 }
@@ -131,7 +137,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
 public class Obstacle extends GameObject {
-    
+
     public Obstacle(Texture texture, float startX, float groundY) {
         super(texture, startX, groundY);
     }
@@ -139,9 +145,9 @@ public class Obstacle extends GameObject {
     // gameSpeed — это скорость, с которой бежит мир
     public void update(float gameSpeed) {
         float dt = Gdx.graphics.getDeltaTime();
-        
+
         x -= gameSpeed * dt; // Двигаемся влево
-        
+
         updateBounds();
     }
 
@@ -170,12 +176,12 @@ import java.util.Iterator;
 
 public class MyGdxGame extends ApplicationAdapter {
     SpriteBatch batch;
-    
+
     Texture imgRunner, imgCactus;
-    
+
     Runner player;
     ArrayList<Obstacle> obstacles;
-    
+
     float gameSpeed = 300;     // Скорость бега (пикселей в секунду)
     float spawnTimer = 0;      // Таймер создания препятствий
     int score = 0;             // Очки
@@ -183,10 +189,10 @@ public class MyGdxGame extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        
+
         imgRunner = new Texture("runner.png");
         imgCactus = new Texture("cactus.png");
-        
+
         player = new Runner(imgRunner);
         obstacles = new ArrayList<>();
     }
@@ -194,13 +200,13 @@ public class MyGdxGame extends ApplicationAdapter {
     @Override
     public void render() {
         ScreenUtils.clear(0.5f, 0.8f, 1, 1); // Небесно-голубой фон
-        
+
         float dt = Gdx.graphics.getDeltaTime();
 
         // --- ЛОГИКА ---
-        
+
         player.update();
-        
+
         // Генерация препятствий
         spawnTimer += dt;
         // Каждые 1.5 - 2.5 секунды создаем новый кактус
@@ -209,7 +215,7 @@ public class MyGdxGame extends ApplicationAdapter {
             // Создаем кактус далеко справа (ширина экрана + 50)
             obstacles.add(new Obstacle(imgCactus, Gdx.graphics.getWidth() + 50, 100));
             spawnTimer = 0;
-            
+
             // Немного случайности, чтобы не было скучно:
             // следующий кактус появится через случайное время
             spawnTimer -= MathUtils.random(0.0f, 1.0f);
@@ -220,7 +226,7 @@ public class MyGdxGame extends ApplicationAdapter {
         while (iter.hasNext()) {
             Obstacle obs = iter.next();
             obs.update(gameSpeed);
-            
+
             // Проверка столкновения (Проигрыш)
             if (obs.getBounds().overlaps(player.getBounds())) {
                 System.out.println("ОЙ! Споткнулся. Счет: " + score);
@@ -228,7 +234,7 @@ public class MyGdxGame extends ApplicationAdapter {
                 obstacles.clear();  // Удаляем все препятствия
                 break;              // Прерываем цикл, чтобы не было ошибок
             }
-            
+
             // Если препятствие ушло за экран
             if (obs.isOffScreen()) {
                 iter.remove();
@@ -239,16 +245,16 @@ public class MyGdxGame extends ApplicationAdapter {
 
         // --- ОТРИСОВКА ---
         batch.begin();
-        
+
         // Рисуем "Землю" (просто прямоугольник или линию)
         // Для простоты можно пока не рисовать, но представим, что Y=100 это пол.
-        
+
         player.draw(batch);
-        
+
         for (Obstacle obs : obstacles) {
             obs.draw(batch);
         }
-        
+
         batch.end();
     }
 
