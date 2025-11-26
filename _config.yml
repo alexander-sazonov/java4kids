@@ -1,6 +1,6 @@
 title: Уроки Java для детей
 description: Учебные материалы по программированию на Java и libGDX
-theme: just-the-docs
+remote_theme: pmarsceill/just-the-docs
 
 url: https://alexander-sazonov.github.io
 baseurl: /java4kids  # ← замените на имя вашего репозитория!
