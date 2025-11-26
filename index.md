@@ -10,5 +10,14 @@ nav_order: 1
 
 ## Содержание
 
-- [Игра "Pop the Balloon"](ballons.md)
+- [Игра "Поймай шарик"](ballons.md)
 - [игра "Pong"](pong.md)
+- [игра "Арканоид"](breakout.md)
+- [игра "Охота на Монстров"](catch_the_monster.md)
+- [игра "Поймай кота"](chase_the_cat.md)
+- [игра "Endless Jumper"](endless_jumper.md)
+- [игра "Maze Runner"](maze_runner.md)
+- [игра "Целься и Стреляй!"](shoot_the_target.md)
+- [игра "Space Shooter"](space_shooter.md)
+- [игра "Top-Down Racing"](top_down_racing.md)
+- [игра "Agario"](agario_lite.md)
