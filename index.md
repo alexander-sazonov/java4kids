@@ -21,3 +21,5 @@ nav_order: 1
 - [игра "Space Shooter"](space_shooter.md)
 - [игра "Racing Game"](top_down_racing.md)
 - [игра "Agario"](agario_lite.md)
+
+[Картинки для игр](https://disk.yandex.ru/d/RwBW5P0g1ed3aQ)
