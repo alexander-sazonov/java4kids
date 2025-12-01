@@ -21,5 +21,6 @@ nav_order: 1
 - [игра "Space Shooter"](space_shooter.md)
 - [игра "Racing Game"](top_down_racing.md)
 - [игра "Agario"](agario_lite.md)
-
-[Картинки для игр](https://disk.yandex.ru/d/RwBW5P0g1ed3aQ)
+## Изображения для игр
+- [Изображения найденные мной](https://disk.yandex.ru/d/RwBW5P0g1ed3aQ)
+- [Изображения на сайте OpenGameArt.Org](https://opengameart.org/art-search-advanced?keys=&field_art_type_tid%5B%5D=9&sort_by=count&sort_order=DESC)
